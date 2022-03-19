@@ -6,7 +6,7 @@
 Summary:	Haskell 98 phantom types to avoid unsafely passing dummy arguments
 Name:		ghc-%{pkgname}
 Version:	0.8.6
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/tagged
