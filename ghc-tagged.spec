@@ -4,6 +4,7 @@
 #
 %define		pkgname	tagged
 Summary:	Haskell 98 phantom types to avoid unsafely passing dummy arguments
+Summary(pl.UTF-8):	Typy fantomowe Haskella 98 dla uniknięcia niebezpiecznej analizy zaślepkowych argumentów
 Name:		ghc-%{pkgname}
 Version:	0.8.6
 Release:	2
@@ -14,31 +15,28 @@ Source0:	http://hackage.haskell.org/package/%{pkgname}-%{version}/%{pkgname}-%{v
 # Source0-md5:	08cebb2c83fba496cc87d859eddb2d7b
 Patch0:		ghc-8.10.patch
 URL:		http://hackage.haskell.org/package/tagged
-BuildRequires:	ghc >= 6.12.3
+BuildRequires:	ghc >= 7.10
 BuildRequires:	ghc-base >= 2
+BuildRequires:	ghc-base < 5
 BuildRequires:	ghc-deepseq >= 1.1
-BuildRequires:	ghc-ghc-prim
+BuildRequires:	ghc-deepseq < 1.5
 BuildRequires:	ghc-template-haskell >= 2.8
-BuildRequires:	ghc-transformers >= 0.2
-BuildRequires:	ghc-transformers-compat >= 0.5
+BuildRequires:	ghc-transformers >= 0.4.2.0
+BuildRequires:	ghc-transformers < 0.6
 %if %{with prof}
-BuildRequires:	ghc-prof
+BuildRequires:	ghc-prof >= 7.10
 BuildRequires:	ghc-base-prof >= 2
 BuildRequires:	ghc-deepseq-prof >= 1.1
-BuildRequires:	ghc-ghc-prim-prof
 BuildRequires:	ghc-template-haskell-prof >= 2.8
-BuildRequires:	ghc-transformers-prof >= 0.2
-BuildRequires:	ghc-transformers-compat-prof >= 0.5
+BuildRequires:	ghc-transformers-prof >= 0.4.2.0
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
 Requires(post,postun):	/usr/bin/ghc-pkg
 Requires:	ghc-base >= 2
 Requires:	ghc-deepseq >= 1.1
-Requires:	ghc-ghc-prim
 Requires:	ghc-template-haskell >= 2.8
-Requires:	ghc-transformers >= 0.2
-Requires:	ghc-transformers-compat >= 0.5
+Requires:	ghc-transformers >= 0.4.2.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
@@ -50,6 +48,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Haskell 98 phantom types to avoid unsafely passing dummy arguments.
 
+%description -l pl.UTF-8
+Typy fantomowe Haskella 98 dla uniknięcia niebezpiecznej analizy
+zaślepkowych argumentów.
+
 %package prof
 Summary:	Profiling %{pkgname} library for GHC
 Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
@@ -57,10 +59,8 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	ghc-base-prof >= 2
 Requires:	ghc-deepseq-prof >= 1.1
-Requires:	ghc-ghc-prim-prof
 Requires:	ghc-template-haskell-prof >= 2.8
-Requires:	ghc-transformers-prof >= 0.2
-Requires:	ghc-transformers-compat-prof >= 0.5
+Requires:	ghc-transformers-prof >= 0.4.2.0
 
 %description prof
 Profiling %{pkgname} library for GHC.  Should be installed when
@@ -83,6 +83,7 @@ runhaskell Setup.lhs configure -v2 \
 	--docdir=%{_docdir}/%{name}-%{version}
 
 runhaskell Setup.lhs build
+
 runhaskell Setup.lhs haddock --executables
 
 %install
@@ -113,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGELOG.markdown LICENSE README.markdown %{name}-%{version}-doc/html
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
+%attr(755,root,root) %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.a
 %exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
 
